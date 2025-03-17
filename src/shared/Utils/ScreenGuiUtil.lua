@@ -102,27 +102,37 @@ function ScreenGuiUtil.RemoveFromAllPlayers(screenGui: string | ScreenGui)
     end)
 end
 
-function ScreenGuiUtil.AddToAllPlayers(gui: ScreenGui | string, createOnPlayerJoin: boolean?): RBXScriptConnection?
- 
+function ScreenGuiUtil.AddToAllPlayers(gui: ScreenGui | string)
     local function addGuiToPlayer(player)
         if not player:FindFirstChild("PlayerGui") then return end
         local clonedGui = GetScrenGuiInstanceClone(gui)
         clonedGui.Parent = player:FindFirstChild("PlayerGui")
     end
 
-    -- Add GUI to all players currently in the game
+    for _, player in ipairs(Players:GetPlayers()) do
+        addGuiToPlayer(player)
+    end
+end
+
+function ScreenGuiUtil.AddToAllPlayersWithConnection(gui: ScreenGui | string, callback: (player: Player, screen: ScreenGui)->()?): RBXScriptConnection
+
+    local function addGuiToPlayer(player)
+        if not player:FindFirstChild("PlayerGui") then return end
+        local clonedGui = GetScrenGuiInstanceClone(gui)
+        clonedGui.Parent = player:FindFirstChild("PlayerGui")
+
+        if callback then
+            callback(player, clonedGui)
+        end
+    end
+
+    local Connection = Players.PlayerAdded:Connect(addGuiToPlayer)
+    
     for _, player in ipairs(Players:GetPlayers()) do
         addGuiToPlayer(player)
     end
 
-    -- If createOnPlayerJoin is true, set up a PlayerAdded connection
-    if createOnPlayerJoin then
-        return Players.PlayerAdded:Connect(addGuiToPlayer)
-    end
-
-    return nil
+    return Connection
 end
-
-
 
 return ScreenGuiUtil

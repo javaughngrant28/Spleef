@@ -2,11 +2,10 @@ local RunService = game:GetService("RunService")
 
 local player = game.Players.LocalPlayer
 
-local BadNetwork = require(game.ReplicatedStorage.Shared.Modules.BadNetwork)
+local RemoteUtil = require(game.ReplicatedStorage.Shared.Utils.RemoteUtil)
 local MaidModule = require(game.ReplicatedStorage.Shared.Modules.Maid)
 
 local maid: MaidModule.Maid = MaidModule.new()
-local network: BadNetwork.Client = BadNetwork.new()
 
 local function CreateBodyVelocity(): BodyVelocity
     local bv = Instance.new("BodyVelocity")
@@ -42,5 +41,5 @@ local function Set(TARGET_SPEED)
     end)
 end
 
-network:On("SetCharacterWalkSpeed", Set)
+RemoteUtil.OnClient("SetCharacterWalkSpeed", Set)
 

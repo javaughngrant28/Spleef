@@ -4,6 +4,7 @@ local groupId = 35325652
 local developerRank = 13
 local prefix = '/'
 
+local Intermission = require(game.ServerScriptService.Modules.Intermission)
 
 local self = {}
 
@@ -34,6 +35,10 @@ function self.KillAll()
 			player.Character.Humanoid.Health = 0
 		end
 	end
+end
+
+function self.Intermission()
+	Intermission.Start()
 end
 
 function self.Kill(player: Player)
