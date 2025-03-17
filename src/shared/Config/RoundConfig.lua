@@ -1,0 +1,3 @@
+return {
+    StartingCountdownDuration = 10
+}

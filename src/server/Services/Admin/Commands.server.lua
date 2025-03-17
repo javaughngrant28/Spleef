@@ -4,7 +4,7 @@ local groupId = 35325652
 local developerRank = 13
 local prefix = '/'
 
-local Intermission = require(game.ServerScriptService.Modules.Intermission)
+local RoundAPI = require(game.ServerScriptService.Services.Rounds.RoundAPI)
 
 local self = {}
 
@@ -37,8 +37,8 @@ function self.KillAll()
 	end
 end
 
-function self.Intermission()
-	Intermission.Start()
+function self.StartRound()
+	RoundAPI.StartNewRound()
 end
 
 function self.Kill(player: Player)

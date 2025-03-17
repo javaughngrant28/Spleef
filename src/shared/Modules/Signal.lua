@@ -26,17 +26,17 @@
 export type Connection = {
     Disconnect: (self: Connection) -> (),
     _connected: boolean,
-    _signal: Signal,
+    _signal: SignalType,
     _fn: (...any) -> (),
     _next: Connection | false,
 }
 
-export type Signal = {
-    Connect: (self: Signal, fn: (...any) -> ()) -> Connection,
-    DisconnectAll: (self: Signal) -> (),
-    Fire: (self: Signal, ...any) -> (),
-    Wait: (self: Signal) -> ...any,
-    Once: (self: Signal, fn: (...any) -> ()) -> Connection,
+export type SignalType = {
+    Connect: (self: SignalType, fn: (...any) -> ()) -> Connection,
+    DisconnectAll: (self: SignalType) -> (),
+    Fire: (self: SignalType, ...any) -> (),
+    Wait: (self: SignalType) -> ...any,
+    Once: (self: SignalType, fn: (...any) -> ()) -> Connection,
     _handlerListHead: Connection | false,
 }
 
