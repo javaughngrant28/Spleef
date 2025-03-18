@@ -77,7 +77,7 @@ end
 
 function TweenUtil.TweenAndDestroy(instance: Instance, properties: {[string]: any}, tweenData: TweenInfoData)
     local tween = TweenUtil.Tween(instance, properties, tweenData, true)
-    tween.Completed:Connect(function()
+    tween.Completed:Once(function()
         instance:Destroy()
     end)
     return tween
