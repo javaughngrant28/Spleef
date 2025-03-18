@@ -1,7 +1,7 @@
 
 local MaidModule = require(game.ReplicatedStorage.Shared.Modules.Maid)
+local MathUtil = require(game.ReplicatedStorage.Shared.Utils.MathUtil)
 local GameConfig = require(game.ReplicatedStorage.Shared.Config.GameConfig)
-local SoundUtil = require(game.ReplicatedStorage.Shared.Utils.SoundUtil)
 
 local Maps: Folder = game.ReplicatedStorage.Assets.Maps
 local PlayArea: Folder = game.Workspace.PlayArea
@@ -55,11 +55,11 @@ function Normal:__HidingSequnce(platform: MeshPart | BasePart)
     if not platform or not platform.Parent then return end
 
 	self:__TooglAttributes(platform,true)
+	local startTime = tick()
 
 	platform.Transparency = 1
-	SoundUtil.PlayInPart(self._TouchedSound,platform)
 
-	task.wait(GameConfig.PlatformHidingEffectDuration)
+	task.wait(MathUtil.GetTimeLeft(startTime,GameConfig.PlatformHidingEffectDuration))
 	if not platform or not platform.Parent then return end
 
 	platform.CanCollide = false
@@ -67,12 +67,13 @@ end
 
 function Normal:__ShowingSequnce(platform: MeshPart | BasePart)
     if not platform or not platform.Parent then return end
-	self:__TooglAttributes(platform,false)
 
-	task.wait(GameConfig.PlatformShowingEffectDuration)
+	self:__TooglAttributes(platform,false)
+	local startTime = tick()
+
+	task.wait(MathUtil.GetTimeLeft(startTime,GameConfig.PlatformShowingEffectDuration))
 	if not platform or not platform.Parent then return end
 
-    task.wait()
 	platform.Transparency = 0
 	platform.CanCollide = true
 end

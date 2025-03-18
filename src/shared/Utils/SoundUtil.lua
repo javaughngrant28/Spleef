@@ -29,7 +29,7 @@ function SoundUtil.PlaySoundInElement(soundReffrence: Sound, element: GuiObject)
     sound:Destroy()
 end
 
-function SoundUtil.PlayInPart(sound: Sound, part: Part)
+function SoundUtil.PlayInPart(sound: Sound, part: BasePart)
 	if sound == nil or part == nil then return end
 	if sound.ClassName ~= 'Sound' then return end
 

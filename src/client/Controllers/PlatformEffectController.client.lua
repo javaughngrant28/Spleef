@@ -1,9 +1,12 @@
 local MaidModule = require(game.ReplicatedStorage.Shared.Modules.Maid)
 local TweenUtil = require(game.ReplicatedStorage.Shared.Utils.TweenUtil)
+local MathUtil = require(game.ReplicatedStorage.Shared.Utils.MathUtil)
+local SoundUtil = require(game.ReplicatedStorage.Shared.Utils.SoundUtil)
 local GameConfig = require(game.ReplicatedStorage.Shared.Config.GameConfig)
 
 local Maid: MaidModule.Maid = MaidModule.new()
 
+local platformSounds: Folder = game.ReplicatedStorage.Assets.Sounds.Platform
 local PlayArea: Folder = workspace.PlayArea
 local hexPart: Part = game.ReplicatedStorage.Assets.PlatformParts.Hex
 
@@ -16,15 +19,32 @@ local function CreateHexClone(platform: MeshPart | BasePart): MeshPart | BasePar
     return hexClone
 end
 
+local function PlaySound(platform: MeshPart | BasePart)
+    local soundName = platform:GetAttribute('Sound_Name') :: string
+    assert(soundName and typeof(soundName) =="string", `{platform} Has no 'Sound_Name' Attribute Or It's not found`)
+
+    local sound = platformSounds:FindFirstChild(soundName) :: Sound
+    assert(sound, `{soundName}: Not Found In {platformSounds}`)
+
+    SoundUtil.PlayInPart(sound,platform)
+end
+
 function Hide(platform: MeshPart | BasePart)
+    local startTime = tick()
+
+    PlaySound(platform)
+
     local hexClone = CreateHexClone(platform)
+    hexClone.BrickColor = BrickColor.new('Neon orange')
+    hexClone.Material = Enum.Material.Neon
+    hexClone.Transparency = 0.1
 
     local goal1 = {
         Position = platform.CFrame.Position - Vector3.new(0,0.4,0)
     }
 
     local tweenData1 = {
-        time = GameConfig.PlatformHidingEffectDuration
+        time = MathUtil.GetTimeLeft(startTime,GameConfig.PlatformHidingEffectDuration)
     }
 
     local goal2 = {
@@ -48,6 +68,8 @@ function Hide(platform: MeshPart | BasePart)
 end
 
 function Show(platform: MeshPart | BasePart)
+    local startTime = tick()
+
     local hexClone = CreateHexClone(platform)
     hexClone.Position = platform.CFrame.Position - Vector3.new(0,1,0)
 
@@ -56,7 +78,7 @@ function Show(platform: MeshPart | BasePart)
     }
 
     local tweenData = {
-        time = GameConfig.PlatformShowingEffectDuration
+        time = MathUtil.GetTimeLeft(startTime,GameConfig.PlatformShowingEffectDuration) + 0.04,
     }
 
     local tween = TweenUtil.TweenAndDestroy(hexClone,goal,tweenData)
