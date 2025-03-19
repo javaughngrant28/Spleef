@@ -7,7 +7,7 @@ local PlayerLoadedSignal = Signal.new()
 
 local PlayerAPI = {}
 
-function PlayerAPI.GetPlayerLoadedSignal(): Signal.Signal
+function PlayerAPI.GetPlayerLoadedSignal(): Signal.SignalType
     return PlayerLoadedSignal
 end
 
