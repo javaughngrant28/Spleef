@@ -1,4 +1,5 @@
 local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
 local player = Players.LocalPlayer
 
@@ -15,6 +16,25 @@ local JumpCount = 0
 local debounce = false
 local debounceTime = 0.2
 
+local function IncressVolosity(character: Model)
+    local humanoid = character:FindFirstChild('Humanoid') :: Humanoid
+    local rootPart = character:FindFirstChild('HumanoidRootPart') :: Part
+    assert(rootPart,'No HumanoidRootPart')
+    assert(humanoid,'No Humanoid')
+
+    local bodyVelocity = Instance.new('BodyVelocity')
+    Maid['BV'] = bodyVelocity
+    bodyVelocity.MaxForce = Vector3.new(2000,0,2000)
+    bodyVelocity.Parent = rootPart
+
+    Maid['RS'] = RunService.Heartbeat:Connect(function()
+        bodyVelocity.Velocity = humanoid.MoveDirection * DoubleJumpConfig.VELOCITY
+        if humanoid.Health <= 0 then
+            Maid:DoCleaning()
+        end
+    end)
+end
+
 local function SetDefaultJumpHight(humanoid: Humanoid)
     humanoid.UseJumpPower = false
     humanoid.JumpHeight = CharacterConfig.JumpHeight
@@ -25,6 +45,8 @@ local function onHumanoidStateChanged(old: Enum.HumanoidStateType, new: Enum.Hum
     if new ~= Enum.HumanoidStateType.Landed then return end
     CanDoubleJump = true
     JumpCount = 0
+    Maid['BV'] = nil
+    Maid['RS'] = nil
 end
 
 local function onJumpRequest()
@@ -48,7 +70,7 @@ local function onJumpRequest()
 
     humanoid.JumpHeight = CharacterConfig.JumpHeight * DoubleJumpConfig.JUMP_MULTIPLIER
 	humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
-    task.wait(0.1)
+    IncressVolosity(character)
     SetDefaultJumpHight(humanoid)
 end
 
