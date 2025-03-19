@@ -1,0 +1,3 @@
+return {
+    JumpHeight = 12,
+}
