@@ -21,8 +21,8 @@ function Stage.ReleasePlayers()
 end
 
 
-function Stage.HoverAllPlayersOnStage()
-	for _, player: Player in Players:GetChildren() do
+function Stage.HoverPlayersOnStage(listOfPlayers: {Player})
+	for _, player: Player in listOfPlayers do
 		local FinishedLoading = player:FindFirstChild('FinishedLoading') :: BoolValue
 		if not FinishedLoading or not FinishedLoading.Value then continue end
 

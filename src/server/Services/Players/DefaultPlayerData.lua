@@ -15,6 +15,7 @@ export type DataInstance = {
 			Xbox: string,
 		}
 	},
+	InMacth: boolean,
 }
 
 local DefaultPlayerData = {}
@@ -22,6 +23,7 @@ local DefaultPlayerData = {}
 DefaultPlayerData.Instances = {
     FinishedLoading = false,
 	Keybinds = {},
+	InMacth = false,
 }
 
 DefaultPlayerData.Template = {
