@@ -21,6 +21,8 @@ local RunService = game:GetService('RunService')
 local FOLDER_NAME = 'NETWORK EVENTS'
 local GENERAL_REMOTE_NAME = 'GENERAL'
 
+local connections: { [ClientCallBack | ServerCallBack]: RBXScriptConnection } = {}
+
 local function CreateFolder(name: string?, location: Instance?): Folder
 	local folder = Instance.new('Folder')
 	folder.Name = name or FOLDER_NAME
@@ -80,14 +82,21 @@ local function ConnectCallBack(eventName: string,remote: RemoteEvent, callback: 
 			callback(...)
 		end
 	end
+	local connection
 	
 	if RunService:IsServer() then
-		remote.OnServerEvent:Connect(function(player: Player,_eventName: string, ...)
+		connection = remote.OnServerEvent:Connect(function(player: Player,_eventName: string, ...)
 			onConnect(_eventName,player,...)
 		end)
 	else
-		remote.OnClientEvent:Connect(onConnect)
+		connection = remote.OnClientEvent:Connect(onConnect)
 	end
+
+	if connections[callback] then
+		connections[callback]:Disconnect()
+	end
+
+	connections[callback] = connection
 end
 
 local EventUtil = {}
@@ -141,5 +150,12 @@ function EventUtil.FireServer(eventName: string, ...)
 	remote:FireServer(eventName,...)
 end
 
+function EventUtil.Destroy(callback: ClientCallBack | ServerCallBack)
+	if connections[callback] then
+		connections[callback]:Disconnect()
+		connections[callback] = nil
+		print('Removed Connection:',callback)
+	end
+end
 
 return EventUtil

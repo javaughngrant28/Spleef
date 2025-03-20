@@ -3,6 +3,7 @@ local Weapons: Folder = game.ReplicatedStorage.Assets.Models.Weapons
 
 local MaidModule = require(game.ReplicatedStorage.Shared.Modules.Maid)
 local AttachModel = require(game.ServerScriptService.Components.AttachModel)
+local InputDetector = require(game.ServerScriptService.Modules.InputDetector)
 
 export type WeaponType = {
     new: (player: Player, weaponName: string)-> WeaponType,
@@ -24,8 +25,13 @@ function Weapon.new(player: Player, weaponName: string): WeaponType
     return self
 end
 
+function Weapon:Attack(...)
+    print(...)
+end
+
 function Weapon:EnableAttack()
     self:__Attach(AttachModel.Type.RightHand)
+    self:_ConnectToInpue()
 end
 
 function Weapon:__Constructor(player: Player, weaponName: string)
@@ -48,6 +54,15 @@ end
 
 function Weapon:_AttachToHand()
     self:__Attach(AttachModel.Type.RightHand)
+end
+
+function Weapon:_ConnectToInpue()
+    local InputDetectorObject = InputDetector.new(self._PLAYER,'Attack','AttackInput')
+    self._MAID['InputDetectorObject'] = InputDetectorObject
+
+    InputDetectorObject:Connect(function(...)
+        self:Attack(...)
+    end)
 end
 
 
