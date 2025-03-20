@@ -9,21 +9,21 @@ export type DataTemplate = {
 }
 
 export type DataInstance = {
+	InMacth: boolean,
 	Keybinds: {
 		[string]: {
 			PC: string,
 			Xbox: string,
 		}
 	},
-	InMacth: boolean,
 }
 
 local DefaultPlayerData = {}
 
 DefaultPlayerData.Instances = {
     FinishedLoading = false,
-	Keybinds = {},
 	InMacth = false,
+	Keybinds = {},
 }
 
 DefaultPlayerData.Template = {

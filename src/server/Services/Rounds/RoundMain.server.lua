@@ -24,7 +24,11 @@ local function AddLoadedPlayersToInMatchTable()
     playersInMatch = {}
     for _, player: Player in Players:GetChildren() do
         local finishedLoading = player:FindFirstChild("FinishedLoading") :: BoolValue
+        local InMacth = player:FindFirstChild("InMacth") :: BoolValue
         if not finishedLoading or not finishedLoading.Value then continue end
+        if not InMacth then continue end
+
+        InMacth.Value = true
         table.insert(playersInMatch,player)
     end
 end
