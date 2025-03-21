@@ -32,6 +32,11 @@ function InputBase:__Constructor(Remote: RemoteEvent, props: {any})
     self._PROPS = props
     self._REMOTE = Remote
     self:_BindContextAction()
+    self:_Load()
+end
+
+function InputBase:_Load()
+    return
 end
 
 function InputBase:InputTriggered(actionName: string, inputState: Enum.UserInputState)

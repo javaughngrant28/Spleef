@@ -32,7 +32,7 @@ InputDetector._MAID = nil
 InputDetector._NETWORK = nil
 InputDetector._LastTimeActivated = nil
 
-InputDetector._Peramiters = {}
+InputDetector.Peramiters = {}
 InputDetector._KeybindName = ''
 InputDetector._ModuleName = ''
 
@@ -54,15 +54,8 @@ function InputDetector.new(player: Player, keybindName: string, moduleName: stri
 	return self
 end
 
-
-function InputDetector:AddPeramiters(valueTable: {[string]: any})
-	for index: string, value: any in valueTable do
-		self._Peramiters[index] = value
-	end
-end
-
 function InputDetector:_GetPeramiters(): {[string]: any}
-	local valueTable = self._Peramiters
+	local valueTable = self.Peramiters
 	valueTable['Cooldown'] = self.Cooldown
 	valueTable['KeybindName'] = self._KeybindName
 	return valueTable

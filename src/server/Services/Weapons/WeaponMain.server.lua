@@ -29,10 +29,18 @@ end
 local function onPlayerLoaded(player: Player)
    if player.Character then
     CreateWeapon(player,'Hammer')
-    else
-        player.CharacterAdded:Wait()
-        CreateWeapon(player,'Hammer')
    end
+
+   player.CharacterAdded:Connect(function(character)
+    local humanoid = character:WaitForChild('Humanoid',5) :: Humanoid
+    assert(humanoid,`{player}'s character has no humanoid`)
+
+    CreateWeapon(player,'Hammer')
+
+    humanoid.Died:Once(function()
+        Maid[player.Name] = nil
+    end)
+   end)
 end
 
 enableAttackSignal:Connect(EnableAttack)

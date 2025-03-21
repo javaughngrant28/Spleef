@@ -33,7 +33,6 @@ end
 
 function ParticleUtil.ScaleAllParticlesInCharcter(target: Model, value: number)
 	local bodyParts: {BasePart} = target:GetChildren()
-	
 	for _, bodyPart: BasePart in bodyParts do
 		if not bodyPart:IsA('BasePart') then continue end
 		
@@ -41,7 +40,6 @@ function ParticleUtil.ScaleAllParticlesInCharcter(target: Model, value: number)
 			if not emiter:IsA('ParticleEmitter') then continue end
 			IncrementParticleScale(emiter,value)
 		end
-		
 	end
 end
 
@@ -93,9 +91,8 @@ function ParticleUtil.EmitParticlesAtPosition(particleModel: Model, position: Ve
 			warn("EmitParticlesAtPosition: PrimaryPart not set in particle model.")
 		end
 
-		-- Emit particles and schedule removal
 		ParticleUtil.EmitAllParticles(modelClone)
-		Debris:AddItem(modelClone, 10)  -- Adjust the lifetime as needed
+		Debris:AddItem(modelClone, 1)
 	end)
 end
 
